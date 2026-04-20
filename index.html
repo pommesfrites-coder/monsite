@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Site One-Page avec Chat</title>
+    <style>
+        /* --- STYLES GÉNÉRAUX --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f6;
+        }
+
+        /* --- NAVIGATION --- */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(44, 62, 80, 0.95);
+            padding: 1rem 0;
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+        }
+
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+        }
+
+        nav ul li { margin: 0 20px; }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover { color: #3498db; }
+
+        /* --- SECTIONS --- */
+        section {
+            padding: 120px 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        h1 { font-size: 3.5rem; margin-bottom: 1rem; color: #2c3e50; }
+        h2 { font-size: 2.5rem; margin-bottom: 1.5rem; color: #2c3e50; }
+        p { max-width: 700px; font-size: 1.1rem; margin-bottom: 20px; }
+
+        #accueil { background: linear-gradient(135deg, #ece9e6, #ffffff); }
+        #a-propos { background-color: #ffffff; }
+        #services { background-color: #f9f9f9; }
+        #contact { background-color: #2c3e50; color: white; }
+        #contact h2 { color: white; }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.3s;
+        }
+
+        .btn:hover {
+            background: #2980b9;
+            transform: translateY(-3px);
+        }
+
+        /* --- SYSTÈME DE CHAT --- */
+        .chat-btn {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            background: #3498db;
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            z-index: 2000;
+            transition: transform 0.3s;
+        }
+
+        .chat-btn:hover { transform: scale(1.1); }
+
+        .chat-window {
+            position: fixed;
+            bottom: 100px;
+            right: 25px;
+            width: 320px;
+            height: 450px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            display: none; /* Caché par défaut */
+            flex-direction: column;
+            overflow: hidden;
+            z-index: 2000;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .chat-header {
+            background: #2c3e50;
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            font-size: 0.9rem;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+
+        .bot { background: #e9ecef; color: #333; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .user { background: #3498db; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+
+        .chat-input {
+            display: flex;
+            padding: 10px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .chat-input input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            outline: none;
+            margin-right: 8px;
+        }
+
+        .chat-input button {
+            background: #3498db;
+            color: white;
+            border: none;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        footer {
+            background: #1a252f;
+            color: white;
+            text-align: center;
+            padding: 30px 0;
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <ul>
+            <li><a href="#accueil">Accueil</a></li>
+            <li><a href="#a-propos">À Propos</a></li>
+            <li><a href="#services">Services</a></li>
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+    <section id="accueil">
+        <h1>Créez votre futur.</h1>
+        <p>Le partenaire idéal pour vos projets digitaux de demain.</p>
+        <a href="#services" class="btn">Découvrir nos services</a>
+    </section>
+
+    <section id="a-propos">
+        <h2>Notre Vision</h2>
+        <p>Nous croyons en la simplicité et en l'efficacité. Ce site en est la preuve : tout ce dont vous avez besoin, réuni en un seul endroit fluide.</p>
+    </section>
+
+    <section id="services">
+        <h2>Ce que nous faisons</h2>
+        <div style="display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; margin-top: 30px;">
+            <div style="background: white; padding: 30px; border-radius: 10px; width: 280px; shadow: 0 4px 6px rgba(0,0,0,0.1);">
+                <h3>🚀 Rapidité</h3>
+                <p>Sites optimisés pour une vitesse éclair.</p>
+            </div>
+            <div style="background: white; padding: 30px; border-radius: 10px; width: 280px;">
+                <h3>📱 Responsive</h3>
+                <p>Parfait sur mobile, tablette et ordinateur.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact">
+        <h2>Discutons ensemble</h2>
+        <p>Prêt à lancer votre projet ? Envoyez-nous un message.</p>
+        <p style="font-size: 1.5rem; font-weight: bold;">hello@mon-site.com</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 - Créé avec passion</p>
+    </footer>
+
+    <div class="chat-btn" onclick="toggleChat()">💬</div>
+
+    <div class="chat-window" id="chatWindow">
+        <div class="chat-header">
+            <span>Assistant IA</span>
+            <span style="cursor:pointer" onclick="toggleChat()">✕</span>
+        </div>
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot">Bonjour ! Comment puis-je vous aider aujourd'hui ?</div>
+        </div>
+        <div class="chat-input">
+            <input type="text" id="userInput" placeholder="Posez votre question..." onkeypress="handleKeyPress(event)">
+            <button onclick="sendMessage()">➤</button>
+        </div>
+    </div>
+
+    <script>
+        function toggleChat() {
+            const chat = document.getElementById('chatWindow');
+            const display = window.getComputedStyle(chat).display;
+            chat.style.display = (display === 'none') ? 'flex' : 'none';
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+        function sendMessage() {
+            const input = document.getElementById('userInput');
+            const container = document.getElementById('chatMessages');
+            const val = input.value.trim();
+
+            if (val !== "") {
+                // Message utilisateur
+                const uMsg = document.createElement('div');
+                uMsg.className = 'message user';
+                uMsg.textContent = val;
+                container.appendChild(uMsg);
+                
+                input.value = "";
+                container.scrollTop = container.scrollHeight;
+
+                // Réponse automatique après un petit délai
+                setTimeout(() => {
+                    const bMsg = document.createElement('div');
+                    bMsg.className = 'message bot';
+                    
+                    // Petite logique de réponse
+                    if(val.toLowerCase().includes("prix")) {
+                        bMsg.textContent = "Nos services sont sur mesure. Quel est votre budget ?";
+                    } else if(val.toLowerCase().includes("bonjour")) {
+                        bMsg.textContent = "Bonjour ! Quel plaisir de vous voir.";
+                    } else {
+                        bMsg.textContent = "C'est noté ! Un expert reviendra vers vous très vite.";
+                    }
+                    
+                    container.appendChild(bMsg);
+                    container.scrollTop = container.scrollHeight;
+                }, 800);
+            }
+        }
+    </script>
+</body>
+</html>
